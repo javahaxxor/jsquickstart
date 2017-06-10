@@ -1,0 +1,19 @@
+# Node
+node_modules
+/npm-debug.log
+
+# Other
+dist
+
+# IDE
+.vscode
+
+# ignore merge leftovers
+*.orig
+*.BASE.*
+*.BACKUP.*
+*.LOCAL.*
+*.REMOTE.*
+
+# ignore history plugin files
+.history

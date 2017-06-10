@@ -1,0 +1,25 @@
+$color-dim: rgb(77, 77, 77);
+$color-grey: #4d4d4d;
+$color-box-shadow: #666;
+$color-panel: #f4f4f4;
+$color-white: white;
+$color-border: lightgray;
+$color-border-bottom: rgba(192, 192, 192, 0.1);
+$color-hover-highlight: #fc3;
+$color-hover-delete: darkred;
+$color-error: red;
+$color-mask: rgba(0, 0, 0, 0.5);
+$color-containerbg: black;
+$color-infotext: #3970b5;
+
+@mixin main-font {
+  font: 11px "Liberation Sans", sans-serif;
+  font-weight: 500;
+  color: $color-grey;
+}
+
+@mixin main-font-title {
+  font: 12px "Liberation Sans", sans-serif;
+  font-weight: 700;
+  color: $color-grey;
+}

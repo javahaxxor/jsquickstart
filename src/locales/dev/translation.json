@@ -1,0 +1,15 @@
+{
+  "header": {
+    "about": "About DEV",
+    "legal": "Legal DEV",
+    "title": "Title DEV",
+    "information": "Information DEV",
+    "error": "Error DEV",
+    "settings": "Settings DEV"
+  },
+  "help": {
+  },
+  "label": {
+    "1111": "Script Error: See Browser Console for Detail"
+  }
+}
