@@ -11,7 +11,6 @@ const extractCSS = new ExtractTextPlugin('css/styles.css');
 const webpack = require('webpack');
 
 module.exports = (env) => {
-
   return {
     context: __dirname + '/src',
     entry: __dirname + '/src/main.js',
@@ -73,12 +72,11 @@ module.exports = (env) => {
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from: 'locales', to: 'locales'},
-        {from: 'data', to: 'data'}
       ]),
       new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: 'templates/index.template.ejs',
+        title: 'Widget',
         inject: 'body'
       }),
       extractCSS

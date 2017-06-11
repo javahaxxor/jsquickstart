@@ -3,6 +3,11 @@
     "ecmaVersion": 6,
     "sourceType": "module"
   },
+ "ecmaFeatures": {
+    "modules": true,
+    "spread" : true,
+    "restParams" : true
+  },
   "env": {
     "browser": true,
     "es6": true

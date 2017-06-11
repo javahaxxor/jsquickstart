@@ -14,24 +14,24 @@
   "devDependencies": {
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
-    "eslint": "^3.13.1",
-    "eslint-config-google": "^0.7.1",
+    "eslint": "^4.4.1",
+    "eslint-config-google": "^0.9.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "extract-text-webpack-plugin": "^2.0.0-beta",
+    "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.1",
-    "html-loader": "^0.4.4",
+    "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.26.0",
     "node-sass": "^4.5.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.1",
-    "style-loader": "^0.16.1",
-    "stylelint": "^7.8.0",
-    "stylelint-config-standard": "^16.0.0",
-    "webpack": "^2.2.0",
+    "style-loader": "^0.18.2",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
+    "webpack": "^3.5.4",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "jquery": "^3.1.1"
+    "uuid": "^3.1.0"
   }
 }

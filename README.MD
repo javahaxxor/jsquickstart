@@ -1,6 +1,7 @@
 
-## Get crackin'
+## Javascript quickstart project with a flickr widget
 
 ```
-npm install && npm run watch
+ncu -u
+yarn && npm run watch
 ```

@@ -1,1 +1,23 @@
-@import '_variables'
+
+body {
+  margin: 0;
+}
+
+div[id^='widget-'] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #f1f1f1;
+  border-bottom: 2px;
+  border-color: black;
+  border-right: 2px;
+  position: relative;
+
+  &:hover {
+    background-color: red;
+    opacity: 1;
+  }
+}
