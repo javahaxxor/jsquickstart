@@ -5,9 +5,8 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const extractCSS = new ExtractTextPlugin('css/styles.css');
 const webpack = require('webpack');
 
 module.exports = (env) => {
@@ -42,10 +41,18 @@ module.exports = (env) => {
         },
         {
           test: /\.scss$/,
-          use: extractCSS.extract({
-            fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
-          })
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                // you can specify a publicPath here
+                // by default it uses publicPath in webpackOptions.output
+                publicPath: '../',
+                hmr: process.env.NODE_ENV === 'development'
+              }
+            },
+            'css-loader', 'sass-loader'
+          ]
         },
         {
           test: /\.json$/,
@@ -70,6 +77,7 @@ module.exports = (env) => {
         poll: 500 // is this the same as specifying --watch-poll?
       }
     },
+    mode: 'development',
     plugins: [
       new CopyWebpackPlugin([
       ]),
@@ -79,7 +87,13 @@ module.exports = (env) => {
         title: 'Widget',
         inject: 'body'
       }),
-      extractCSS
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // all options are optional
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+        ignoreOrder: false // Enable to remove warnings about conflicting order
+      })
     ],
     resolve: {
       modules: ['src', 'node_modules']

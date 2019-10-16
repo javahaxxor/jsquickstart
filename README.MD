@@ -3,5 +3,5 @@
 
 ```
 ncu -u
-yarn && npm run watch
+npm install && npm build && npm run watch
 ```
