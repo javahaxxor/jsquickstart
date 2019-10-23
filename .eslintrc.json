@@ -20,7 +20,7 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "indent": ["error", 2],
-    "max-len": ["error", 140],
+    "max-len": ["error", 180],
     "no-console": ["error"],
     "no-shadow": ["error", {"hoist": "all"}],
     "no-trailing-spaces": ["error"],

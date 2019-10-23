@@ -5,14 +5,21 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const ZipPlugin = require('zip-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
 
 module.exports = (env) => {
   return {
     context: __dirname + '/src',
     entry: __dirname + '/src/main.js',
+    output: {
+      path: __dirname + '/dist/app',
+      filename: '[name].js'
+    },
     module: {
       rules: [
         {
@@ -40,6 +47,10 @@ module.exports = (env) => {
           }
         },
         {
+          test: /\.json$/,
+          loader: 'file-loader'
+        },
+        {
           test: /\.scss$/,
           use: [
             {
@@ -57,12 +68,43 @@ module.exports = (env) => {
         {
           test: /\.json$/,
           loader: 'file-loader'
+        },
+        {
+          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: 'assets/fonts'
+              }
+            }
+          ]
         }
       ]
     },
-    output: {
-      path: __dirname + '/dist',
-      filename: '[name].js'
+    optimization: {
+      noEmitOnErrors: true,
+      namedModules: true,
+      namedChunks: true,
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /node_modules/, // you may add "vendor.js" here if you want to
+            name: 'vendor',
+            chunks: 'initial',
+            enforce: true
+          }
+        }
+      },
+      minimize: true,
+      minimizer: [
+        new TerserWebpackPlugin({
+          test: /\.js(\?.*)?$/i,
+          parallel: true,
+          exclude: /\/.map/
+        })
+      ]
     },
     devtool: 'source-map',
     devServer: {
@@ -77,9 +119,10 @@ module.exports = (env) => {
         poll: 500 // is this the same as specifying --watch-poll?
       }
     },
-    mode: 'development',
+    mode: 'production',
     plugins: [
       new CopyWebpackPlugin([
+        {from: '../assets', to: 'assets'}
       ]),
       new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
@@ -93,7 +136,37 @@ module.exports = (env) => {
         filename: '[name].css',
         chunkFilename: '[id].css',
         ignoreOrder: false // Enable to remove warnings about conflicting order
+      }),
+      new ZipPlugin({
+        path: '../zip',
+        filename: `${new Date().toISOString()}_template.zip`,
+
+        pathMapper: function(assetPath) {
+          // put all pngs in an `images` subdir
+          if (assetPath.endsWith('.png')) {
+            return path.join(path.dirname(assetPath), 'images', path.basename(assetPath));
+          }
+          return assetPath;
+        },
+
+        exclude: [/\.map$/, /\.raw$/],
+
+        fileOptions: {
+          mtime: new Date(),
+          mode: 0o100664,
+          compress: true,
+          forceZip64Format: false
+        },
+
+        zipOptions: {
+          forceZip64Format: false
+        }
+      }),
+      new CleanWebpackPlugin({
+        verbose: true,
+        cleanOnceBeforeBuildPatterns: [__dirname + 'dist/']
       })
+    // new BundleAnalyzerPlugin()
     ],
     resolve: {
       modules: ['src', 'node_modules']
