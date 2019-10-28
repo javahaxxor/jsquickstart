@@ -1,3 +1,4 @@
+// https://github.com/GoogleChrome/samples/tree/gh-pages/service-worker recipes
 const CACHE_VERSION = 1;
 
 const CURRENT_CACHE = ['MultiQ_template_<template_name>' + CACHE_VERSION];
@@ -19,7 +20,7 @@ self.addEventListener('activate', function(event) {
   // Delete all caches that aren't named in CURRENT_CACHES.
   // While there is only one cache in this example, the same logic will handle the case where
   // there are multiple versioned caches.
-  var expectedCacheNamesSet = new Set(Object.values(CURRENT_CACHE));
+  let expectedCacheNamesSet = new Set(Object.values(CURRENT_CACHE));
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -36,34 +37,33 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(caches.match(event.request)       //respond from cache if request is cached
-  .then(function(response) {
-
-    return fetch(event.request, {                     // fetch from network
-    // mode: 'cors',
-    // credentials: 'same-origin',
-    // headers: {
+  event.respondWith(caches.match(event.request) // respond from cache if request is cached
+    .then(function(response) {
+      return fetch(event.request, { // fetch from network
+        // mode: 'cors',
+        // credentials: 'same-origin',
+        // headers: {
         // 'Access-Control-Allow-Origin': '*',
         // 'Content-Type': 'application/json',
         // 'Accept': 'application/json'
-    // }
-  }).then(function (response) {
-    if (response && response.status < 400 && !response.url.includes('chrome-extension')) {
-      // response may be used only once, we need to save clone to put one copy in cache
-      // and serve second one
-      const responseClone = response.clone();
-      caches.open(CURRENT_CACHE).then(function (cache) {
-        cache.put(event.request, responseClone).catch(error => console.warn("Cache error:", error.message));
+        // }
+      }).then(function(response) {
+        if (response && response.status < 400 && !response.url.includes('chrome-extension')) {
+          // response may be used only once, we need to save clone to put one copy in cache
+          // and serve second one
+          const responseClone = response.clone();
+          caches.open(CURRENT_CACHE).then(function(cache) {
+            cache.put(event.request, responseClone).catch((error) => console.warn('Cache error:', error.message));
+          });
+        }
+
+        return response;
+      }).catch(function(error) {
+        console.log('Error in fetch handler:', error);
+        // caches.match() always resolves
+        // but in case of success response will have value
+        return response;
       });
     }
-          
-    return response;
-  }).catch(function (error) {
-    console.log("Error in fetch handler:", error)
-    // caches.match() always resolves
-    // but in case of success response will have value
-    return response;
-  });
-  }
-  ));
+    ));
 });
