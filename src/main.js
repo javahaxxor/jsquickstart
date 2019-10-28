@@ -2,7 +2,19 @@ import 'style/style.scss';
 import uuid from 'uuid/v4';
 
 // sizes : [mstzb]
-
+// const path = 'https://newsapi.org/v2/top-headlines?country=se&apiKey=a8e51aef0ff44f1091af38f3798b6159';
+// Load external json
+// fetch(path, {
+//     mode: 'cors',
+//     credentials: 'same-origin',
+//     headers: {
+//         'Access-Control-Allow-Origin': '*',
+//         'Content-Type': 'application/rss+xml',
+//         'Accept': 'application/rss+xml'
+//       // 'Content-Type': 'application/json',
+//       // 'Accept': 'application/json'
+//     }
+// })
 
 const uid = uuid();
 const currentScript = document.currentScript;
@@ -68,6 +80,25 @@ function createImgElement(photoData) {
   return card;
 }
 
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function(reg) {
+      if (reg.installing) {
+        console.log('Service worker installing');
+      } else if (reg.waiting) {
+        console.log('Service worker installed');
+      } else if (reg.active) {
+        console.log('Service worker active');
+      }
+    }).catch(function(error) {
+      // registration failed
+      console.log('Registration failed with ' + error);
+    });
+  }
+}
+
+registerServiceWorker();
+
 const configObj = {
   method: 'GET',
   mode: 'cors',
@@ -84,4 +115,5 @@ fetch(searchUrl, configObj).then((data) => {
 
 const parent = currentScript.parentElement;
 parent.append(widget);
+
 
