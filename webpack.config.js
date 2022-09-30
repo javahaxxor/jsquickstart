@@ -2,7 +2,7 @@
 /* eslint no-console: "off" */
 
 'use strict';
-
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
@@ -58,8 +58,8 @@ module.exports = (env) => {
               options: {
                 // you can specify a publicPath here
                 // by default it uses publicPath in webpackOptions.output
-                publicPath: '../',
-                hmr: process.env.NODE_ENV === 'development'
+                publicPath: '../'
+                // hmr: process.env.NODE_ENV === 'development'
               }
             },
             'css-loader', 'sass-loader'
@@ -85,8 +85,8 @@ module.exports = (env) => {
     },
     optimization: {
       noEmitOnErrors: true,
-      namedModules: true,
-      namedChunks: true,
+      // namedModules: true,
+      // namedChunks: true,
       splitChunks: {
         cacheGroups: {
           vendor: {
@@ -108,22 +108,27 @@ module.exports = (env) => {
     },
     devtool: 'source-map',
     devServer: {
-      stats: {colors: true},
-      contentBase: __dirname + '/dist',
-      inline: true,
-      noInfo: false,
+      liveReload: true,
+      static: {
+        directory: path.join(__dirname, '/dist')
+      },
+      // contentBase: __dirname + '/dist',
+      // inline: true,
+      // noInfo: false,
       host: '127.0.0.1',
-      port: 8000,
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: 500 // is this the same as specifying --watch-poll?
-      }
+      port: 8000
+      // watchOptions: {
+      //   aggregateTimeout: 300,
+      //   poll: 500 // is this the same as specifying --watch-poll?
+      // }
     },
     mode: 'production',
     plugins: [
-      new CopyWebpackPlugin([
-        {from: '../assets', to: 'assets'}
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          {from: '../assets', to: 'assets'}
+        ]
+      }),
       new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: 'templates/index.template.ejs',
@@ -137,31 +142,31 @@ module.exports = (env) => {
         chunkFilename: '[id].css',
         ignoreOrder: false // Enable to remove warnings about conflicting order
       }),
-      new ZipPlugin({
-        path: '../zip',
-        filename: `${new Date().toISOString()}_template.zip`,
+      // new ZipPlugin({
+      //   path: '../zip',
+      //   filename: `${new Date().toISOString()}_template.zip`,
 
-        pathMapper: function(assetPath) {
-          // put all pngs in an `images` subdir
-          if (assetPath.endsWith('.png')) {
-            return path.join(path.dirname(assetPath), 'images', path.basename(assetPath));
-          }
-          return assetPath;
-        },
+      //   pathMapper: function(assetPath) {
+      //     // put all pngs in an `images` subdir
+      //     if (assetPath.endsWith('.png')) {
+      //       return path.join(path.dirname(assetPath), 'images', path.basename(assetPath));
+      //     }
+      //     return assetPath;
+      //   },
 
-        exclude: [/\.map$/, /\.raw$/],
+      //   exclude: [/\.map$/, /\.raw$/],
 
-        fileOptions: {
-          mtime: new Date(),
-          mode: 0o100664,
-          compress: true,
-          forceZip64Format: false
-        },
+      //   fileOptions: {
+      //     mtime: new Date(),
+      //     mode: 0o100664,
+      //     compress: true,
+      //     forceZip64Format: false
+      //   },
 
-        zipOptions: {
-          forceZip64Format: false
-        }
-      }),
+      //   zipOptions: {
+      //     forceZip64Format: false
+      //   }
+      // }),
       new CleanWebpackPlugin({
         verbose: true,
         cleanOnceBeforeBuildPatterns: [__dirname + 'dist/']

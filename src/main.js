@@ -1,5 +1,5 @@
 import 'style/style.scss';
-import uuid from 'uuid/v4';
+import {v4 as uuidv4} from 'uuid';
 
 // sizes : [mstzb]
 // const path = 'https://newsapi.org/v2/top-headlines?country=se&apiKey=a8e51aef0ff44f1091af38f3798b6159';
@@ -16,7 +16,7 @@ import uuid from 'uuid/v4';
 //     }
 // })
 
-const uid = uuid();
+const uid = uuidv4();
 const currentScript = document.currentScript;
 currentScript.setAttribute('id', uid);
 

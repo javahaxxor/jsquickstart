@@ -7,6 +7,9 @@ div[id^='widget-'] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  background-color: lightblue;
+  width: 800px;
+  height: 100px;
 }
 
 .card {
